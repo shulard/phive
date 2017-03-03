@@ -115,10 +115,7 @@ class Factory {
                 $this->request->parse(new InstallContext()),
                 $this->getPhiveXmlConfig(),
                 $this->getTargetDirectoryLocator()
-            ),
-            $this->getPharService(),
-            $this->getPhiveXmlConfig(),
-            $this->getEnvironment()
+            ), $this->getInstallService(), $this->getEnvironment(), $this->getRequestedPharResolverService()
         );
     }
 
@@ -132,7 +129,8 @@ class Factory {
                 $this->getPhiveXmlConfig(),
                 $this->getTargetDirectoryLocator()
             ),
-            $this->getPharService(),
+            $this->getInstallService(),
+            $this->getRequestedPharResolverService(),
             $this->getPhiveXmlConfig()
         );
     }
@@ -170,10 +168,11 @@ class Factory {
                 $this->getEnvironment()->getWorkingDirectory()
             ),
             $this->getComposerService(),
-            $this->getPharService(),
+            $this->getInstallService(),
             $this->getPhiveXmlConfig(),
             $this->getEnvironment(),
-            $this->getConsoleInput()
+            $this->getConsoleInput(),
+            $this->getRequestedPharResolverService()
         );
     }
 
@@ -230,6 +229,18 @@ class Factory {
         }
 
         return $this->version;
+    }
+
+    /**
+     * @return InstallService
+     */
+    private function getInstallService() {
+        return new InstallService(
+            $this->getPhiveXmlConfig(),
+            $this->getPharInstaller(),
+            $this->getPharRegistry(),
+            $this->getPharService()
+        );
     }
 
     /**
@@ -339,11 +350,8 @@ class Factory {
      */
     private function getPharService() {
         return new PharService(
-            $this->getPharDownloader(),
-            $this->getPharInstaller(),
             $this->getPharRegistry(),
-            $this->getRequestedPharResolverService(),
-            $this->getOutput()
+            $this->getPharDownloader()
         );
     }
 
