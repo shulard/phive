@@ -4,6 +4,7 @@
 /.idea
 /bin
 /build
+/docs/build
 /phpunit.xml
 /tools
 /vendor
